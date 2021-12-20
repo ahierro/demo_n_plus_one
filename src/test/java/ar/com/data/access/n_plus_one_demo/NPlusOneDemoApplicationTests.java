@@ -1,6 +1,7 @@
 package ar.com.data.access.n_plus_one_demo;
 
 import ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto;
+import ar.com.data.access.n_plus_one_demo.model.Employee;
 import ar.com.data.access.n_plus_one_demo.model.EmployeeOfficeView;
 import ar.com.data.access.n_plus_one_demo.model.Office;
 import ar.com.data.access.n_plus_one_demo.repository.EmployeeOfficeViewRepository;
@@ -9,7 +10,10 @@ import ar.com.data.access.n_plus_one_demo.repository.OfficeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,53 +25,83 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DataJpaTest
 class NPlusOneDemoApplicationTests {
 
-	@Autowired
-	OfficeRepository officeRepository;
+    @Autowired
+    EntityManager em;
 
-	@Autowired
-	EmployeeRepository employeeRepository;
+    @Autowired
+    OfficeRepository officeRepository;
 
-	@Autowired
-	EmployeeOfficeViewRepository employeeOfficeViewRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
-	@Test
-	void loadOffices() {
-		List<Office> offices = officeRepository.findAll();
-		assertNotNull(offices);
-		assertEquals(2,offices.size());
-		offices.forEach(office -> {
-			assertNotNull(office.getEmployeeList());
-			assertEquals(2,office.getEmployeeList().size());
-		});
-	}
+    @Autowired
+    EmployeeOfficeViewRepository employeeOfficeViewRepository;
 
-	@Test
-	void loadOfficesJoin() {
-		Set<Office> offices = officeRepository.findAllJoined();
-		assertNotNull(offices);
-		assertEquals(2,offices.size());
-		offices.forEach(office -> {
-			assertNotNull(office.getEmployeeList());
-			assertEquals(2,office.getEmployeeList().size());
-		});
-	}
+    @Test
+    void loadOffices() {
+        List<Office> offices = officeRepository.findAll();
+        assertNotNull(offices);
+        assertEquals(2, offices.size());
+        offices.forEach(office -> {
+            assertNotNull(office.getEmployeeList());
+            assertEquals(2, office.getEmployeeList().size());
+        });
+    }
 
-	@Test
-	void loadView() {
-		List<EmployeeOfficeView> view= employeeOfficeViewRepository.findAll();
-		assertNotNull(view);
-		assertEquals(4,view.size());
-	}
+    @Test
+    void loadOfficesJoin() {
+        Set<Office> offices = officeRepository.findAllJoined();
+        assertNotNull(offices);
+        assertEquals(2, offices.size());
+        offices.forEach(office -> {
+            assertNotNull(office.getEmployeeList());
+            assertEquals(2, office.getEmployeeList().size());
+        });
+    }
 
-	@Test
-	void employeeRepository() {
-		List<EmployeeOfficeDto> view = employeeRepository.findJoined(EmployeeOfficeDto.class);
-		assertNotNull(view);
-		assertEquals(4,view.size());
+    @Test
+    void loadView() {
+        List<EmployeeOfficeView> view = employeeOfficeViewRepository.findAll();
+        assertNotNull(view);
+        assertEquals(4, view.size());
+    }
 
-		Map<Long,List<EmployeeOfficeDto>> groupedByOfficeId = view.stream()
-				.collect(groupingBy(EmployeeOfficeDto::getIdOffice));
-		assertEquals(2,groupedByOfficeId.size());
+    @Test
+    void employeeFindJoined() {
+        List<EmployeeOfficeDto> view = employeeRepository.findJoined(EmployeeOfficeDto.class);
+        assertNotNull(view);
+        assertEquals(4, view.size());
 
-	}
+        Map<Long, List<EmployeeOfficeDto>> groupedByOfficeId = view.stream()
+                .collect(groupingBy(EmployeeOfficeDto::getIdOffice));
+        assertEquals(2, groupedByOfficeId.size());
+    }
+
+    @Test
+    void employeeFindAll() {
+        List<Employee> employees = employeeRepository.findAll();
+        assertNotNull(employees);
+        assertEquals(4, employees.size());
+//		view.get(0).getOffice().getAddress();
+    }
+
+    @Test
+    void employeePaging() {
+        Page<Employee> employees = employeeRepository.findAllByOffice(em.getReference(Office.class, 1L),
+                PageRequest.of(0, 2));
+        assertNotNull(employees);
+        assertEquals(2L, employees.getTotalElements());
+        assertEquals(1, employees.getTotalPages());
+        assertEquals(2, employees.getContent().size());
+    }
+
+    @Test
+    void employeePagingNative() {
+        Page<Employee> employees = employeeRepository.findAllByNativeQuery(1L,
+                PageRequest.of(0, 2));
+        assertNotNull(employees);
+        assertEquals(2L, employees.getTotalElements());
+        assertEquals(1, employees.getTotalPages());
+        assertEquals(2, employees.getContent().size());
+    }
 }

@@ -8,7 +8,8 @@ public class Employee {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne
+//    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "office_id", referencedColumnName = "id")
     private Office office;
 
