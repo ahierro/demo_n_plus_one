@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
     @Query("select new ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto( e.id,  o.id,  e.name,  o.address) " +
             "from Employee e join Office o on e.office.id = o.id")
     <T> List<T> findJoined(Class<T> type);
@@ -23,5 +24,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             countQuery =  "SELECT COUNT(*) FROM EMPLOYEE WHERE OFFICE_ID = :officeId",
             nativeQuery = true)
     Page<Employee> findAllByNativeQuery(@Param("officeId") Long officeId, Pageable pageable);
+
+    @Query(value = "from Employee where office.id = :officeId",
+            countQuery =  "select count(e) from Employee e where e.office.id  = :officeId")
+    Page<Employee> findAllByJpqlQuery(@Param("officeId") Long officeId, Pageable pageable);
+
+
+    @Query(value = "from Employee where office.id IN (:officeIds)")
+    List<Employee> findAllByOffices(@Param("officeIds") List<Long> officeIds);
+
+    @Query(value = "from Employee where office.id = :officeId")
+    List<Employee> findAllByOffice(@Param("officeId")Long officeId);
 
 }
