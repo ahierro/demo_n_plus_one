@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,5 +43,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByOffice(@Param("officeId")Long officeId);
 
     List<Employee> findAll(Sort sort);
+
+    int deleteAllByName(String name);
+
+    @Modifying
+    @Query("delete Employee e where e.name = :name")
+    int deleteByQuery(String name);
+
+    @Modifying
+    @Query("update Employee e set e.name = 'NO' where e.name = :name")
+    void updateByQuery(String name);
+
 
 }

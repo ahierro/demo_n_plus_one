@@ -212,6 +212,18 @@ class NPlusOneDemoApplicationTests {
     }
 
     @Test
+    void deleteAllByName() {
+        employeeRepository.deleteAllByName("Brian");
+        assertEquals(3,employeeRepository.findAll().size());
+    }
+
+    @Test
+    void deleteByQuery() {
+        employeeRepository.deleteByQuery("Brian");
+        assertEquals(3,employeeRepository.findAll().size());
+    }
+
+    @Test
     void saveAllAndFlush() {
         List<Employee> employees = employeeRepository
                 .findAll();
@@ -220,5 +232,12 @@ class NPlusOneDemoApplicationTests {
         });
         employeeRepository.saveAllAndFlush(employees);
     }
+
+    @Test
+    void updateByQuery() {
+        employeeRepository.updateByQuery("Brian");
+    }
+
+
 
 }
