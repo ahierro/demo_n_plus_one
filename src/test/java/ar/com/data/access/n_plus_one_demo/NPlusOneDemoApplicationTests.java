@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -87,6 +89,13 @@ class NPlusOneDemoApplicationTests {
     }
 
     @Test
+    void employeeFindFirst() {
+        List<Employee> employees = employeeRepository.findFirst2ByName("Brian");
+        assertNotNull(employees);
+        assertEquals(1, employees.size());
+    }
+
+    @Test
     void employeePaging() {
         Page<Employee> employees = employeeRepository.findAllByOffice(em.getReference(Office.class, 1L),
                 PageRequest.of(0, 4));
@@ -146,6 +155,70 @@ class NPlusOneDemoApplicationTests {
             employees.addAll(employeeRepository.findAllByOffices(chunk));
         }
         assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testSort() {
+        List<Employee> employees = employeeRepository
+                .findAll(Sort.by("id").descending());
+        assertNotNull(employees);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testSortJoined() {
+        List<Employee> employees = employeeRepository
+                .findAll(Sort.by("id").descending().and(Sort.by("office.address").ascending()));
+        assertNotNull(employees);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testSortJoinedList() {
+        List<Employee> employees = employeeRepository
+                .findAll(Sort.by(Arrays.asList(
+                        Sort.Order.asc("id"),
+                        Sort.Order.desc("office.address")
+                )));
+        assertNotNull(employees);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testTypedSort() {
+        List<Employee> employees = employeeRepository
+                .findAll(Sort.sort(Employee.class)
+                        .by(Employee::getId)
+                        .ascending()
+                        .and(Sort.sort(Employee.class)
+                                .by((Employee employee) -> employee.getOffice().getAddress()).ascending())
+                );
+        assertNotNull(employees);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void deleteAll() {
+        List<Employee> employee = employeeRepository
+                .findAll();
+        employeeRepository.deleteAll(employee);
+        em.flush();
+    }
+    @Test
+    void deleteAllInBatch() {
+        List<Employee> employee = employeeRepository
+                .findAll();
+        employeeRepository.deleteAllInBatch(employee);
+    }
+
+    @Test
+    void saveAllAndFlush() {
+        List<Employee> employees = employeeRepository
+                .findAll();
+        employees.forEach(employee -> {
+            employee.setName("NO");
+        });
+        employeeRepository.saveAllAndFlush(employees);
     }
 
 }

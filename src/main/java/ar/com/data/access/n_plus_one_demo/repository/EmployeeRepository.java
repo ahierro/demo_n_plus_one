@@ -4,6 +4,7 @@ import ar.com.data.access.n_plus_one_demo.model.Employee;
 import ar.com.data.access.n_plus_one_demo.model.Office;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("select new ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto( e.id,  o.id,  e.name,  o.address) " +
             "from Employee e join Office o on e.office.id = o.id")
     <T> List<T> findJoined(Class<T> type);
+
+    Employee findFirstByName(String name);
+    List<Employee> findFirst2ByName(String name);
 
     Page<Employee> findAllByOffice(Office o, Pageable pageable);
 
@@ -35,5 +39,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query(value = "from Employee where office.id = :officeId")
     List<Employee> findAllByOffice(@Param("officeId")Long officeId);
+
+    List<Employee> findAll(Sort sort);
 
 }
