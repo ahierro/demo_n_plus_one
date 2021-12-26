@@ -206,6 +206,7 @@ class NPlusOneDemoApplicationTests {
     }
     @Test
     void deleteAllInBatch() {
+        // ver spring.jpa.properties.hibernate.jdbc.batch_size
         List<Employee> employee = employeeRepository
                 .findAll();
         employeeRepository.deleteAllInBatch(employee);
