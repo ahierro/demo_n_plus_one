@@ -2,6 +2,7 @@ package ar.com.data.access.n_plus_one_demo;
 
 import ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto;
 import ar.com.data.access.n_plus_one_demo.model.Employee;
+import ar.com.data.access.n_plus_one_demo.model.EmployeeDTO;
 import ar.com.data.access.n_plus_one_demo.model.EmployeeOfficeView;
 import ar.com.data.access.n_plus_one_demo.model.Office;
 import ar.com.data.access.n_plus_one_demo.repository.EmployeeOfficeViewRepository;
@@ -14,13 +15,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.partition;
 import static java.util.stream.Collectors.groupingBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -71,7 +69,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void employeeFindJoined() {
-        List<EmployeeOfficeDto> view = employeeRepository.findJoined(EmployeeOfficeDto.class);
+        List<EmployeeOfficeDto> view = employeeRepository.findJoined();
         assertNotNull(view);
         assertEquals(4, view.size());
 
@@ -83,6 +81,13 @@ class NPlusOneDemoApplicationTests {
     @Test
     void employeeFindAll() {
         List<Employee> employees = employeeRepository.findAll();
+        assertNotNull(employees);
+        assertEquals(4, employees.size());
+//		view.get(0).getOffice().getAddress();
+    }
+    @Test
+    void employeeFindAllDTO() {
+        List<EmployeeDTO> employees = employeeRepository.findAllDataMapping();
         assertNotNull(employees);
         assertEquals(4, employees.size());
 //		view.get(0).getOffice().getAddress();

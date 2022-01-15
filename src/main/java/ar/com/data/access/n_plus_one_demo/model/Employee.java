@@ -2,6 +2,20 @@ package ar.com.data.access.n_plus_one_demo.model;
 
 import javax.persistence.*;
 
+@SqlResultSetMapping(
+        name = "findAllDataResultSetMapping",
+        classes = @ConstructorResult(
+                targetClass = EmployeeDTO.class,
+                columns = {
+                        @ColumnResult(name = "id",type = Long.class),
+                        @ColumnResult(name = "name",type = String.class),
+                }
+        )
+)
+@NamedNativeQuery(name = "findAllDataMapping",
+        resultClass = EmployeeDTO.class,
+        resultSetMapping ="findAllDataResultSetMapping",
+        query = "SELECT id,name FROM EMPLOYEE")
 @Entity
 public class Employee {
     @Id

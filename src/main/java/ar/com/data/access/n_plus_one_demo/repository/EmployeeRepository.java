@@ -1,6 +1,8 @@
 package ar.com.data.access.n_plus_one_demo.repository;
 
+import ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto;
 import ar.com.data.access.n_plus_one_demo.model.Employee;
+import ar.com.data.access.n_plus_one_demo.model.EmployeeDTO;
 import ar.com.data.access.n_plus_one_demo.model.Office;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +12,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,7 +20,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("select new ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto( e.id,  o.id,  e.name,  o.address) " +
             "from Employee e join Office o on e.office.id = o.id")
-    <T> List<T> findJoined(Class<T> type);
+    List<EmployeeOfficeDto> findJoined();
+
+    @Query(name = "findAllDataMapping",nativeQuery = true)
+    List<EmployeeDTO> findAllDataMapping();
 
     Employee findFirstByName(String name);
     List<Employee> findFirst2ByName(String name);
