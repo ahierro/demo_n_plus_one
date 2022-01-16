@@ -236,7 +236,8 @@ class NPlusOneDemoApplicationTests {
         employees.forEach(employee -> {
             employee.setName("NO");
         });
-        employeeRepository.saveAllAndFlush(employees);
+        employeeRepository.saveAll(employees);
+        em.flush();
     }
 
     @Test

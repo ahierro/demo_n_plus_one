@@ -1,5 +1,7 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
+import org.hibernate.annotations.BatchSize;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class Office {
     private String address;
 
     @OneToMany(mappedBy="office")
+   // @BatchSize(size = 2)
     private List<Employee> employeeList;
 
     public Office() {
