@@ -51,7 +51,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     int deleteAllByName(String name);
 
     @Modifying
-    @Query("delete Employee e where e.name = :name")
+    @Query("delete from Employee e where e.name = :name")
     int deleteByQuery(String name);
 
     @Modifying

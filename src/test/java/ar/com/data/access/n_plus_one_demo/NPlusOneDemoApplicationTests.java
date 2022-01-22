@@ -83,14 +83,14 @@ class NPlusOneDemoApplicationTests {
         List<Employee> employees = employeeRepository.findAll();
         assertNotNull(employees);
         assertEquals(4, employees.size());
-//		view.get(0).getOffice().getAddress();
+//        employees.get(0).getOffice().getAddress();
     }
     @Test
     void employeeFindAllDTO() {
         List<EmployeeDTO> employees = employeeRepository.findAllDataMapping();
         assertNotNull(employees);
         assertEquals(4, employees.size());
-//		view.get(0).getOffice().getAddress();
+//		employees.get(0).getOffice().getAddress();
     }
 
     @Test
@@ -130,38 +130,6 @@ class NPlusOneDemoApplicationTests {
         assertEquals(1, employees.getTotalPages());
         assertEquals(2, employees.getContent().size());
     }
-
-    @Test
-    void testInClauseBad() {
-        List<Long> ids = Arrays.asList(1L,2L);
-
-        List<Employee> employees = new LinkedList<>();
-        for (Long id : ids) {
-            employees.addAll(employeeRepository.findAllByOffice(id));
-        }
-        assertEquals(4L, employees.size());
-
-    }
-
-    @Test
-    void testInClauseGood() {
-        List<Long> ids = Arrays.asList(1L,2L);
-
-        List<Employee> employees = employeeRepository.findAllByOffices(ids);
-        assertEquals(4L, employees.size());
-    }
-
-    @Test
-    void testInClauseChunks() {
-        List<Long> ids = Arrays.asList(1L,2L);
-        List<List<Long>> chunks = Lists.partition(ids,1000);
-        List<Employee> employees = new LinkedList<>();
-        for (List<Long> chunk : chunks) {
-            employees.addAll(employeeRepository.findAllByOffices(chunk));
-        }
-        assertEquals(4L, employees.size());
-    }
-
     @Test
     void testSort() {
         List<Employee> employees = employeeRepository
@@ -199,6 +167,37 @@ class NPlusOneDemoApplicationTests {
                                 .by((Employee employee) -> employee.getOffice().getAddress()).ascending())
                 );
         assertNotNull(employees);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testInClauseBad() {
+        List<Long> ids = Arrays.asList(1L,2L);
+
+        List<Employee> employees = new LinkedList<>();
+        for (Long id : ids) {
+            employees.addAll(employeeRepository.findAllByOffice(id));
+        }
+        assertEquals(4L, employees.size());
+
+    }
+
+    @Test
+    void testInClauseGood() {
+        List<Long> ids = Arrays.asList(1L,2L);
+
+        List<Employee> employees = employeeRepository.findAllByOffices(ids);
+        assertEquals(4L, employees.size());
+    }
+
+    @Test
+    void testInClauseChunks() {
+        List<Long> ids = Arrays.asList(1L,2L);
+        List<List<Long>> chunks = Lists.partition(ids,1000);
+        List<Employee> employees = new LinkedList<>();
+        for (List<Long> chunk : chunks) {
+            employees.addAll(employeeRepository.findAllByOffices(chunk));
+        }
         assertEquals(4L, employees.size());
     }
 
