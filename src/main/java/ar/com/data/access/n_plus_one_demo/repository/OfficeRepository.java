@@ -12,7 +12,7 @@ import java.util.Set;
 @Repository
 public interface OfficeRepository extends JpaRepository<Office, Long> {
 
-//    @EntityGraph(attributePaths = {"employeeList"})
+   // @EntityGraph(attributePaths = {"employeeList"})
     List<Office> findAll();
 
     @Query("from Office o join fetch o.employeeList e")

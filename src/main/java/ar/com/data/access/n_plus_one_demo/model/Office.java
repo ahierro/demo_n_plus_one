@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 public class Office {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String address;
 

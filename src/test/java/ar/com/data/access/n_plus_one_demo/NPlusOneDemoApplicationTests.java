@@ -12,11 +12,13 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -240,10 +242,47 @@ class NPlusOneDemoApplicationTests {
     }
 
     @Test
+    void updateReference() {
+        Employee brian = employeeRepository.getById(1L);
+        brian.setOffice(em.getReference(Office.class, 2L));
+        employeeRepository.save(brian);
+        em.flush();
+    }
+
+    @Test
     void updateByQuery() {
         employeeRepository.updateByQuery("Brian");
     }
 
+    @Test
+    void insertEmployee() {
+        Employee employee = new Employee();
+        employee.setId(99L);
+        employee.setName("Emma");
+        employeeRepository.save(employee);
+        em.flush();
+    }
+
+    @Test
+    void persistEmployee() {
+        Employee employee = new Employee();
+        employee.setId(99L);
+        employee.setName("Emma");
+        em.persist(employee);
+        em.flush();
+    }
+
+    @Test
+    void findDynamicQuery() {
+        Office o = new Office();
+        o.setAddress("Office A");
+        Employee employee = new Employee();
+        employee.setName("Brian");
+        employee.setOffice(o);
+        Example<Employee> employeeExample = Example.of(employee);
+        List<Employee> employees = employeeRepository.findAll(employeeExample);
+        assertEquals(1,employees.size());
+    }
 
 
 }
