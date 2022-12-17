@@ -1,9 +1,12 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class EmployeeOfficeView {
@@ -38,22 +41,22 @@ public class EmployeeOfficeView {
 
     @Embeddable
     public static class EmployeeOfficeViewId implements Serializable {
-        private Long idEmployee;
-        private Long idOffice;
+        private UUID idEmployee;
+        private UUID idOffice;
 
-        public Long getIdEmployee() {
+        public UUID getIdEmployee() {
             return idEmployee;
         }
 
-        public void setIdEmployee(Long idEmployee) {
+        public void setIdEmployee(UUID idEmployee) {
             this.idEmployee = idEmployee;
         }
 
-        public Long getIdOffice() {
+        public UUID getIdOffice() {
             return idOffice;
         }
 
-        public void setIdOffice(Long idOffice) {
+        public void setIdOffice(UUID idOffice) {
             this.idOffice = idOffice;
         }
 
@@ -61,18 +64,13 @@ public class EmployeeOfficeView {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             EmployeeOfficeViewId that = (EmployeeOfficeViewId) o;
-
-            if (idEmployee != null ? !idEmployee.equals(that.idEmployee) : that.idEmployee != null) return false;
-            return idOffice != null ? idOffice.equals(that.idOffice) : that.idOffice == null;
+            return idEmployee.equals(that.idEmployee) && idOffice.equals(that.idOffice);
         }
 
         @Override
         public int hashCode() {
-            int result = idEmployee != null ? idEmployee.hashCode() : 0;
-            result = 31 * result + (idOffice != null ? idOffice.hashCode() : 0);
-            return result;
+            return Objects.hash(idEmployee, idOffice);
         }
     }
 }
