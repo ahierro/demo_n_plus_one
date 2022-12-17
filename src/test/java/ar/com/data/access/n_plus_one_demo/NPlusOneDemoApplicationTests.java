@@ -9,6 +9,7 @@ import ar.com.data.access.n_plus_one_demo.repository.EmployeeOfficeViewRepositor
 import ar.com.data.access.n_plus_one_demo.repository.EmployeeRepository;
 import ar.com.data.access.n_plus_one_demo.repository.OfficeRepository;
 import com.google.common.collect.Lists;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
 import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;

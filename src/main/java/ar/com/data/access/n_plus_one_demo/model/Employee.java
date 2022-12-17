@@ -1,6 +1,7 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @SqlResultSetMapping(

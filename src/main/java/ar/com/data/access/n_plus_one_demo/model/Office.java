@@ -1,8 +1,9 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
-import org.hibernate.annotations.BatchSize;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 

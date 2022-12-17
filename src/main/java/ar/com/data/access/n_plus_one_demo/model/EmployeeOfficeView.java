@@ -1,8 +1,9 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
