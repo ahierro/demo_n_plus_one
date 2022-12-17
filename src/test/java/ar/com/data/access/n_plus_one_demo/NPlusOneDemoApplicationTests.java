@@ -242,7 +242,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void updateReference() {
-        Employee brian = employeeRepository.getById(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"));
+        Employee brian = employeeRepository.getReferenceById(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"));
         brian.setOffice(em.getReference(Office.class, UUID.fromString("b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39")));
         employeeRepository.save(brian);
         em.flush();
