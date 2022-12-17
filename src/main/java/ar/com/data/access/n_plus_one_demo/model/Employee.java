@@ -1,13 +1,14 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @SqlResultSetMapping(
         name = "findAllDataResultSetMapping",
         classes = @ConstructorResult(
                 targetClass = EmployeeDTO.class,
                 columns = {
-                        @ColumnResult(name = "id",type = Long.class),
+                        @ColumnResult(name = "id",type = UUID.class),
                         @ColumnResult(name = "name",type = String.class),
                 }
         )
@@ -19,7 +20,7 @@ import javax.persistence.*;
 @Entity
 public class Employee {
     @Id
-    private Long id;
+    private UUID id;
     private String name;
 //    @ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +30,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Long id, String name, Office office) {
+    public Employee(UUID id, String name, Office office) {
         this.id = id;
         this.name = name;
         this.office = office;
@@ -43,11 +44,11 @@ public class Employee {
         this.office = office;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

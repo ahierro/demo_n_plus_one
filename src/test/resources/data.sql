@@ -1,23 +1,23 @@
 INSERT INTO OFFICE
     (ID, ADDRESS)
-VALUES (1, 'Office A');
+VALUES ('bfd3a8cc-f24f-46f4-bd90-0aef8a178da6', 'Office A');
 
 INSERT INTO OFFICE
     (ID, ADDRESS)
-VALUES (2, 'Office B');
+VALUES ('b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39', 'Office B');
 
 INSERT INTO EMPLOYEE
     (ID, NAME, OFFICE_ID)
-VALUES (1, 'Brian', 1);
+VALUES ('bfd3a8cc-f24f-46f4-bd90-0aef8a178da6', 'Brian', 'bfd3a8cc-f24f-46f4-bd90-0aef8a178da6');
 
 INSERT INTO EMPLOYEE
     (ID, NAME, OFFICE_ID)
-VALUES (2, 'Alice', 1);
+VALUES ('b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39', 'Alice', 'bfd3a8cc-f24f-46f4-bd90-0aef8a178da6');
 
 INSERT INTO EMPLOYEE
     (ID, NAME, OFFICE_ID)
-VALUES (3, 'John', 2);
+VALUES ('81dfa2a4-6cad-4ddb-af12-0853c5977a66', 'John', 'b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39');
 
 INSERT INTO EMPLOYEE
     (ID, NAME, OFFICE_ID)
-VALUES (4, 'Emma', 2);
+VALUES ('20402f78-c206-442e-86af-7d804564c664', 'Emma', 'b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39');

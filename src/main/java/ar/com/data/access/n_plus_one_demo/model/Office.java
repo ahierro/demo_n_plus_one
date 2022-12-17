@@ -4,11 +4,12 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Office {
     @Id
-    private Long id;
+    private UUID id;
     private String address;
 
     @OneToMany(mappedBy="office")
@@ -18,16 +19,16 @@ public class Office {
     public Office() {
     }
 
-    public Office(Long id, String address) {
+    public Office(UUID id, String address) {
         this.id = id;
         this.address = address;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

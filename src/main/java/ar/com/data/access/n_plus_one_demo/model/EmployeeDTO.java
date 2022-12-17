@@ -1,19 +1,21 @@
 package ar.com.data.access.n_plus_one_demo.model;
 
+import java.util.UUID;
+
 public class EmployeeDTO {
-    private Long id;
+    private UUID id;
     private String name;
 
-    public EmployeeDTO(Long id, String name) {
+    public EmployeeDTO(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

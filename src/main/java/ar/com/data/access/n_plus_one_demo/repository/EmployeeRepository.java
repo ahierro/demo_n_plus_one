@@ -14,9 +14,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     @Query("select new ar.com.data.access.n_plus_one_demo.dto.EmployeeOfficeDto( e.id,  o.id,  e.name,  o.address) " +
             "from Employee e join Office o on e.office.id = o.id")
@@ -33,18 +34,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(value = "SELECT * FROM EMPLOYEE WHERE OFFICE_ID = :officeId",
             countQuery =  "SELECT COUNT(*) FROM EMPLOYEE WHERE OFFICE_ID = :officeId",
             nativeQuery = true)
-    Page<Employee> findAllByNativeQuery(@Param("officeId") Long officeId, Pageable pageable);
+    Page<Employee> findAllByNativeQuery(@Param("officeId") UUID officeId, Pageable pageable);
 
     @Query(value = "from Employee where office.id = :officeId",
             countQuery =  "select count(e) from Employee e where e.office.id  = :officeId")
-    Page<Employee> findAllByJpqlQuery(@Param("officeId") Long officeId, Pageable pageable);
+    Page<Employee> findAllByJpqlQuery(@Param("officeId") UUID officeId, Pageable pageable);
 
 
     @Query(value = "from Employee where office.id IN (:officeIds)")
-    List<Employee> findAllByOffices(@Param("officeIds") List<Long> officeIds);
+    List<Employee> findAllByOffices(@Param("officeIds") List<UUID> officeIds);
 
     @Query(value = "from Employee where office.id = :officeId")
-    List<Employee> findAllByOffice(@Param("officeId")Long officeId);
+    List<Employee> findAllByOffice(@Param("officeId")UUID officeId);
 
     List<Employee> findAll(Sort sort);
 

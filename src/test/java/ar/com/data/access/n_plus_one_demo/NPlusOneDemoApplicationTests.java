@@ -75,7 +75,7 @@ class NPlusOneDemoApplicationTests {
         assertNotNull(view);
         assertEquals(4, view.size());
 
-        Map<Long, List<EmployeeOfficeDto>> groupedByOfficeId = view.stream()
+        Map<UUID, List<EmployeeOfficeDto>> groupedByOfficeId = view.stream()
                 .collect(groupingBy(EmployeeOfficeDto::getIdOffice));
         assertEquals(2, groupedByOfficeId.size());
     }
@@ -104,7 +104,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void employeePaging() {
-        Page<Employee> employees = employeeRepository.findAllByOffice(em.getReference(Office.class, 1L),
+        Page<Employee> employees = employeeRepository.findAllByOffice(em.getReference(Office.class, UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6")),
                 PageRequest.of(0, 4));
         assertNotNull(employees);
         assertEquals(2L, employees.getTotalElements());
@@ -114,7 +114,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void employeePagingNative() {
-        Page<Employee> employees = employeeRepository.findAllByNativeQuery(1L,
+        Page<Employee> employees = employeeRepository.findAllByNativeQuery(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"),
                 PageRequest.of(0, 2));
         assertNotNull(employees);
         assertEquals(2L, employees.getTotalElements());
@@ -125,7 +125,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void employeePagingJpql() {
-        Page<Employee> employees = employeeRepository.findAllByJpqlQuery(1L,
+        Page<Employee> employees = employeeRepository.findAllByJpqlQuery(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"),
                 PageRequest.of(0, 2));
         assertNotNull(employees);
         assertEquals(2L, employees.getTotalElements());
@@ -174,10 +174,10 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void testInClauseBad() {
-        List<Long> ids = Arrays.asList(1L,2L);
+        List<UUID> ids = Arrays.asList(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"),UUID.fromString("b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39"));
 
         List<Employee> employees = new LinkedList<>();
-        for (Long id : ids) {
+        for (UUID id : ids) {
             employees.addAll(employeeRepository.findAllByOffice(id));
         }
         assertEquals(4L, employees.size());
@@ -186,7 +186,7 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void testInClauseGood() {
-        List<Long> ids = Arrays.asList(1L,2L);
+        List<UUID> ids = Arrays.asList(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"),UUID.fromString("b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39"));
 
         List<Employee> employees = employeeRepository.findAllByOffices(ids);
         assertEquals(4L, employees.size());
@@ -194,10 +194,10 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void testInClauseChunks() {
-        List<Long> ids = Arrays.asList(1L,2L);
-        List<List<Long>> chunks = Lists.partition(ids,1000);
+        List<UUID> ids = Arrays.asList(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"),UUID.fromString("b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39"));
+        List<List<UUID>> chunks = Lists.partition(ids,1000);
         List<Employee> employees = new LinkedList<>();
-        for (List<Long> chunk : chunks) {
+        for (List<UUID> chunk : chunks) {
             employees.addAll(employeeRepository.findAllByOffices(chunk));
         }
         assertEquals(4L, employees.size());
@@ -243,8 +243,8 @@ class NPlusOneDemoApplicationTests {
 
     @Test
     void updateReference() {
-        Employee brian = employeeRepository.getById(1L);
-        brian.setOffice(em.getReference(Office.class, 2L));
+        Employee brian = employeeRepository.getById(UUID.fromString("bfd3a8cc-f24f-46f4-bd90-0aef8a178da6"));
+        brian.setOffice(em.getReference(Office.class, UUID.fromString("b1b6a3ec-b20d-4bf2-9a52-0e1386cccc39")));
         employeeRepository.save(brian);
         em.flush();
     }
@@ -257,7 +257,7 @@ class NPlusOneDemoApplicationTests {
     @Test
     void insertEmployee() {
         Employee employee = new Employee();
-        employee.setId(99L);
+        employee.setId(UUID.randomUUID());
         employee.setName("Emma");
         employeeRepository.save(employee);
         em.flush();
@@ -266,7 +266,7 @@ class NPlusOneDemoApplicationTests {
     @Test
     void persistEmployee() {
         Employee employee = new Employee();
-        employee.setId(99L);
+        employee.setId(UUID.randomUUID());
         employee.setName("Emma");
         em.persist(employee);
         em.flush();
